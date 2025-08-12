@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Registration</title>
+
+<style>
+    /* ==== CSS VARIABLES ==== */
+    :root {
+        --primary: #2b7a78;
+        --secondary: #3aafa9;
+        --accent: #def2f1;
+        --white: #ffffff;
+        --danger: #e63946;
+        --success: #4caf50;
+        --font: 'Segoe UI', sans-serif;
+    }
+
+    /* ==== GLOBAL STYLES ==== */
+    body {
+        margin: 0;
+        font-family: var(--font);
+        background-color: var(--accent);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* ==== CONTAINER ==== */
+    .container {
+        background: var(--white);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        max-width: 500px;
+        width: 90%;
+        animation: slideIn 0.8s ease-out;
+    }
+
+    /* ==== HEADING ==== */
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--primary);
+        position: relative;
+    }
+
+    h2::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: var(--secondary);
+        margin: 8px auto 0;
+        border-radius: 5px;
+    }
+
+    /* ==== FORM GRID ==== */
+    form {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    @media (min-width: 600px) {
+        form {
+            grid-template-columns: 1fr 1fr;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+    }
+
+    /* ==== INPUT STYLING ==== */
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: var(--primary);
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 5px var(--secondary);
+        outline: none;
+    }
+
+    /* ==== BUTTON STYLING ==== */
+    button {
+        padding: 12px;
+        border: none;
+        background: var(--primary);
+        color: var(--white);
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+    }
+
+    /* ==== EXTRA BUTTON ==== */
+    #themeBtn {
+        background: var(--danger);
+    }
+    #themeBtn:hover {
+        background: #c1121f;
+    }
+
+    /* ==== MESSAGE ==== */
+    #message {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    /* ==== ANIMATIONS ==== */
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .fade {
+        animation: fade 0.6s ease-in-out;
+    }
+    @keyframes fade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <h2>Student Registration Form</h2>
+    <form id="registrationForm">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        <div>
+            <label for="department">Department</label>
+            <input type="text" id="department" placeholder="Enter department">
+        </div>
+        <div>
+            <label for="year">Year</label>
+            <select id="year">
+                <option value="">--Select Year--</option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+            </select>
+        </div>
+        <div class="full-width">
+            <label for="project">Project Title</label>
+            <input type="text" id="project" placeholder="Enter project title">
+        </div>
+        <button type="submit" class="full-width">Register</button>
+    </form>
+    <button id="themeBtn" class="full-width" style="margin-top:10px;">Change Theme</button>
+    <div id="message"></div>
+</div>
+
+<script>
+    // === PAGE LOAD ALERT ===
+    window.addEventListener("load", () => {
+        alert("Welcome! Please fill in your registration details.");
+    });
+
+    // === VALIDATION FUNCTION ===
+    function validateForm(fields) {
+        let allFilled = true;
+        fields.forEach(field => {
+            if (!field.value.trim()) {
+                field.style.borderColor = "var(--danger)";
+                allFilled = false;
+            } else {
+                field.style.borderColor = "#ccc";
+            }
+        });
+
+        if (!allFilled) {
+            alert("Please fill out all fields.");
+            return false;
+        }
+
+        // Email validation
+        let emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+        if (!emailPattern.test(fields[1].value.trim())) {
+            alert("Enter a valid email address.");
+            fields[1].style.borderColor = "var(--danger)";
+            return false;
+        }
+
+        return true;
+    }
+
+    // === FORM SUBMIT ===
+    document.getElementById("registrationForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        let name = document.getElementById("name");
+        let email = document.getElementById("email");
+        let department = document.getElementById("department");
+        let year = document.getElementById("year");
+        let project = document.getElementById("project");
+
+        let fields = [name, email, department, year, project];
+
+        if (!validateForm(fields)) return;
+
+        let message = document.getElementById("message");
+        message.textContent = `✅ ${name.value}, your registration for "${project.value}" is successful!`;
+        message.style.color = "var(--success)";
+        message.classList.add("fade");
+
+        document.getElementById("registrationForm").reset();
+    });
+
+    // === THEME CHANGE BUTTON ===
+    document.getElementById("themeBtn").addEventListener("click", () => {
+        document.documentElement.style.setProperty('--primary', '#6a4c93');
+        document.documentElement.style.setProperty('--secondary', '#1982c4');
+        document.documentElement.style.setProperty('--accent', '#f1faee');
+        alert("Theme updated!");
+    });
+</script>
+
+</body>
+</html>
