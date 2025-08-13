@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Registration & DOM Manipulation</title>
+
+<!-- Beautiful Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        /* Default Theme */
+        --primary: #2b7a78;
+        --secondary: #3aafa9;
+        --accent: #def2f1;
+        --white: #ffffff;
+        --danger: #e63946;
+        --success: #4caf50;
+        --bg-gradient: linear-gradient(135deg, #e0f7fa, #ffffff);
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: var(--bg-gradient);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        transition: background 0.6s ease;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 30px;
+        border-radius: 20px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        max-width: 500px;
+        width: 90%;
+        animation: fadeSlide 0.8s ease-out;
+        margin-bottom: 20px;
+    }
+
+    @keyframes fadeSlide {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--primary);
+        font-size: 1.8rem;
+        position: relative;
+    }
+
+    h2::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: var(--secondary);
+        margin: 8px auto 0;
+        border-radius: 5px;
+    }
+
+    form {
+        display: grid;
+        gap: 15px;
+    }
+
+    @media (min-width: 600px) {
+        form {
+            grid-template-columns: 1fr 1fr;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: var(--primary);
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        transition: 0.3s;
+        font-size: 14px;
+        background-color: rgba(255,255,255,0.9);
+    }
+
+    input:focus, select:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 6px var(--secondary);
+        outline: none;
+    }
+
+    button, .theme-selector {
+        padding: 12px;
+        border: none;
+        background: var(--primary);
+        color: var(--white);
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover, .theme-selector:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    }
+
+    #message {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    /* Card Styles */
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+        width: 100%;
+        max-width: 900px;
+    }
+
+    .card {
+        background: rgba(255,255,255,0.9);
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        position: relative;
+        transition: transform 0.2s ease;
+        backdrop-filter: blur(8px);
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+    }
+
+    .delete-btn {
+        background: var(--danger);
+        color: var(--white);
+        border: none;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .delete-btn:hover {
+        background: #a4161a;
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <h2>Student Registration Form</h2>
+    <form id="registrationForm">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        <div>
+            <label for="department">Department</label>
+            <input type="text" id="department" placeholder="Enter department">
+        </div>
+        <div>
+            <label for="year">Year</label>
+            <select id="year">
+                <option value="">--Select Year--</option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+            </select>
+        </div>
+        <div class="full-width">
+            <label for="project">Project Title</label>
+            <input type="text" id="project" placeholder="Enter project title">
+        </div>
+        <button type="submit" class="full-width">Register</button>
+    </form>
+
+    <select id="themeSelector" class="theme-selector full-width" style="margin-top:10px;">
+        <option value="default">🌿 Default Theme</option>
+        <option value="sunset">🌇 Sunset Glow</option>
+        <option value="ocean">🌊 Ocean Breeze</option>
+        <option value="lavender">💜 Lavender Bliss</option>
+        <option value="forest">🌲 Forest Fresh</option>
+    </select>
+
+    <button id="createCardBtn" class="full-width" style="margin-top:10px;">Create Card</button>
+    <div id="message"></div>
+</div>
+
+<div class="card-container" id="cardContainer"></div>
+
+<script>
+    // Theme settings
+    const themes = {
+        default: {
+            '--primary': '#2b7a78',
+            '--secondary': '#3aafa9',
+            '--accent': '#def2f1',
+            '--bg-gradient': 'linear-gradient(135deg, #e0f7fa, #ffffff)'
+        },
+        sunset: {
+            '--primary': '#ff6f61',
+            '--secondary': '#ff9a8b',
+            '--accent': '#ffe3d8',
+            '--bg-gradient': 'linear-gradient(135deg, #ff9a8b, #fad0c4)'
+        },
+        ocean: {
+            '--primary': '#005f73',
+            '--secondary': '#0a9396',
+            '--accent': '#94d2bd',
+            '--bg-gradient': 'linear-gradient(135deg, #94d2bd, #e9d8a6)'
+        },
+        lavender: {
+            '--primary': '#6a4c93',
+            '--secondary': '#b185db',
+            '--accent': '#f3e8ff',
+            '--bg-gradient': 'linear-gradient(135deg, #d0bdf4, #f3e8ff)'
+        },
+        forest: {
+            '--primary': '#2b9348',
+            '--secondary': '#55a630',
+            '--accent': '#d8f3dc',
+            '--bg-gradient': 'linear-gradient(135deg, #d8f3dc, #b7e4c7)'
+        }
+    };
+
+    document.getElementById("themeSelector").addEventListener("change", function() {
+        const theme = themes[this.value];
+        for (let prop in theme) {
+            document.documentElement.style.setProperty(prop, theme[prop]);
+        }
+    });
+
+    // Form validation
+    function validateForm(fields) {
+        let allFilled = true;
+        fields.forEach(field => {
+            if (!field.value.trim()) {
+                field.style.borderColor = "var(--danger)";
+                allFilled = false;
+            } else {
+                field.style.borderColor = "#ccc";
+            }
+        });
+        if (!allFilled) {
+            alert("Please fill out all fields.");
+            return false;
+        }
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(fields[1].value.trim())) {
+            alert("Enter a valid email address.");
+            fields[1].style.borderColor = "var(--danger)";
+            return false;
+        }
+        return true;
+    }
+
+    document.getElementById("registrationForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        let name = document.getElementById("name");
+        let email = document.getElementById("email");
+        let department = document.getElementById("department");
+        let year = document.getElementById("year");
+        let project = document.getElementById("project");
+        let fields = [name, email, department, year, project];
+
+        if (!validateForm(fields)) return;
+
+        let message = document.getElementById("message");
+        message.textContent = `✅ ${name.value}, your registration for "${project.value}" is successful!`;
+        message.style.color = "var(--success)";
+        document.getElementById("registrationForm").reset();
+    });
+
+    // Card creation
+    const cardContainer = document.getElementById("cardContainer");
+    document.getElementById("createCardBtn").addEventListener("click", () => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `<p>This is a dynamically created card.</p>`;
+        
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.className = "delete-btn";
+        delBtn.addEventListener("click", () => card.remove());
+
+        card.appendChild(delBtn);
+        cardContainer.appendChild(card);
+    });
+</script>
+
+</body>
+</html>
